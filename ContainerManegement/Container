@@ -32,7 +32,7 @@ function usage () {
        
         #Example
         echo "::"
-        echo "Container -n 20 -p BB"
+        echo "Container master "
 
         [ -z "$ERRORNUM" ] && ERRORNUM=0
 
