@@ -1,0 +1,12 @@
+sudo salt -L bb-blr-prod-compute-11,bb-blr-prod-compute-12,bb-blr-prod-compute-09 state.apply spawn_lxc pillar="{'app':'mp', 'image_name':'ubu-17-base-16-java-tomcat-h2'}" -l debug
+
+
+Computes
+
+	Log into the GOD 
+		ssh -l infra 10.1.246.251
+		
+
+	Then LOG into the Compute Number 
+
+		ssh ubuntu@10.1.248.<ComputerNumber>

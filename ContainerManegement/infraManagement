@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------
+# Name:infra
+# Description: This Script Prepares Standby Server For DataGaurd
+# Version: 1.0
+# Maintainer: Shailesh Thakur
+# usage:
+# ---------------------------------------------------------------------------------
+
+usage() { echo "Usage: $0 [-p <string>]" 1>&2; exit 1; }
+
+while getopts ":s:p:" o; do
+    case "${o}" in
+        s)
+            s=${OPTARG}
+            ((s == 45 || s == 90)) || usage
+            ;;
+        p)
+            p=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${s}" ] || [ -z "${p}" ]; then
+    usage
+fi
