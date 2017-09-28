@@ -28,21 +28,29 @@ def inputs():
 
             url1,url2= Config(ver,role)
 
-            add_to_repo = 'wget -O - %s | sudo apt-key add -' % (url1)
-            write_to_file='echo %s > /etc/apt/sources.list.d/saltstack.list ' % url2
+            key_download = 'wget -O - %s ' % (url1)
+            key="sudo apt-key add -"
+            write_to_file='echo %s > /etc/apt/sources.list.d/saltstack.list ' % (url2)
             install_salt_role='apt-get install salt-%s -y' %(role)
+	    print install_salt_role
+            Cmd1=shlex.split(key_download)
+            Cmd2=shlex.split(key)
 
-            o0,e0,rc0=runCmd(add_to_repo)
-
-            if rc0==0:
+            st_out_1=Popen(Cmd1, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            st_out_2=Popen(Cmd2,stdin=st_out_1.stdout,stdout=PIPE,stderr=PIPE)
+            output, err = st_out_2.communicate()
+            rc=st_out_2.returncode
+  
+            if rc==0:
                 print "Successfully Added to repository"
-                print o0
+                print output
             else:
-                print e0
+                print err
 
 
             o1,e1,rc1=runCmd(write_to_file)
             if rc1==0:
+                print o1
                 print "SuccessFully Written to a File"
                 print o1 
 
@@ -54,7 +62,7 @@ def inputs():
 
             o1, e1, rc1 = runCmd(install_salt_role)
             if rc1==0:
-                print "SuccessFully Updated The repository"
+                print "SuccessFully installed %s " % role
                 print o1
 
 
@@ -71,8 +79,12 @@ def runCmd(cmd):
 
     output, err = Execute_Cmd.communicate()
     rc=Execute_Cmd.returncode
-
+    
     return output,err,rc
+    
+   
+
+   
 
 def Validations(ver,role):
     version_available="""
