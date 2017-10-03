@@ -5,6 +5,7 @@ import logging
 from subprocess import Popen, PIPE
 import shlex
 
+from bbmodules  import runCmd as cmd
 
 #--------------------------------------------------------------------------------
 # Getting Command Line Arguments And Validation
@@ -47,20 +48,22 @@ def inputs():
             else:
                 print err
 
+            o1,e1,rc1=cmd("touch /etc/apt/sources.list.d/saltstack.list")
+            print o1,e1,rc1
 
-            o1,e1,rc1=runCmd(write_to_file)
+            o1,e1,rc1=cmd(write_to_file)
             if rc1==0:
                 print o1
                 print "SuccessFully Written to a File"
                 print o1 
 
 
-            o1,e1,rc1=runCmd('sudo apt-get update')
+            o1,e1,rc1=cmd('sudo apt-get update')
             if rc1==0:
                 print "SuccessFully Updated The repository"
                 print o1
 
-            o1, e1, rc1 = runCmd(install_salt_role)
+            o1, e1, rc1 = cmd(install_salt_role)
             if rc1==0:
                 print "SuccessFully installed %s " % role
                 print o1
@@ -70,21 +73,6 @@ def inputs():
         else :
             usage()
 
-
-def runCmd(cmd):
-
-    cmdargs=shlex.split(cmd)
-
-    Execute_Cmd=Popen(cmdargs, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-
-    output, err = Execute_Cmd.communicate()
-    rc=Execute_Cmd.returncode
-    
-    return output,err,rc
-    
-   
-
-   
 
 def Validations(ver,role):
     version_available="""
