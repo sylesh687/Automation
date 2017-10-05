@@ -31,7 +31,10 @@ def inputs():
 
             key_download = 'wget -O - %s ' % (url1)
             key="sudo apt-key add -"
-            write_to_file='echo %s > /etc/apt/sources.list.d/saltstack.list ' % (url2)
+            #write_to_file='echo %s > /etc/apt/sources.list.d/saltstack.list ' % (url2)
+            url2="deb %s" % url2
+            with open('/etc/apt/sources.list.d/saltstack.list','w') as f:
+		f.write(url2)
             install_salt_role='apt-get install salt-%s -y' %(role)
 	    print install_salt_role
             Cmd1=shlex.split(key_download)
@@ -46,16 +49,7 @@ def inputs():
                 print "Successfully Added to repository"
                 print output
             else:
-                print err
-
-            o1,e1,rc1=cmd("touch /etc/apt/sources.list.d/saltstack.list")
-            print o1,e1,rc1
-
-            o1,e1,rc1=cmd(write_to_file)
-            if rc1==0:
-                print o1
-                print "SuccessFully Written to a File"
-                print o1 
+                print err 
 
 
             o1,e1,rc1=cmd('sudo apt-get update')
