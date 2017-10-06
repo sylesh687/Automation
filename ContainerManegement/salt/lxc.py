@@ -2,6 +2,8 @@ from subprocess import Popen,PIPE
 import shlex
 import sys
 
+from bbmodules import runCmd as cmd
+
 def usage():
 	data= '''
 			***********************LXC Management Scrit**********************
@@ -33,9 +35,8 @@ def inputVal():
 	except ValueError as E:
 
 		print "Please enter a number"
-
-	if (num==0 or num <0 or num> 20):
-		print "Please Enter a no negative number other than 0 and lesser than 20"
+		if (num==0 or num <0 or num> 20):
+			print "Please Enter a no negative number other than 0 and lesser than 20"
 
 	return prefix, num
 
@@ -44,7 +45,7 @@ def inputVal():
 
 def createContainer(number,containerPrefix="bb"):
 
-	for con in range(int(number):
+	for con in range(number):
 		conname="%s%s" % (containerPrefix,con)
 		command="lxc launch ubuntu: %s "% (conname)
 		
@@ -58,7 +59,7 @@ def createContainer(number,containerPrefix="bb"):
 
 def main():
 	prefix,num=inputVal()
-	createContainer(prefix,num)
+	createContainer(num,prefix)
 
 if __name__=="__main__":
 	main()
