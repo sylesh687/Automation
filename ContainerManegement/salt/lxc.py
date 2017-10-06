@@ -45,7 +45,7 @@ def inputVal():
 
 def createContainer(number,containerPrefix="bb"):
 
-	for con in range(number):
+	for con in range(int(number)):
 		conname="%s%s" % (containerPrefix,con)
 		command="lxc launch ubuntu: %s "% (conname)
 		
