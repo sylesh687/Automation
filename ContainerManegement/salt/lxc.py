@@ -27,8 +27,7 @@ def inputVal():
 
 	try:
 		int(prefix)
-		int(num)
-
+		
 		print "Please Enter a Valid Prefix"
 
 	except ValueError as E:
@@ -45,7 +44,7 @@ def inputVal():
 
 def createContainer(number,containerPrefix="bb"):
 
-	for con in range(10):
+	for con in range(number):
 		conname="%s%s" % (containerPrefix,con)
 		command="lxc launch ubuntu: %s "% (conname)
 		
