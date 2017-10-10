@@ -2,15 +2,7 @@
 #                                       App Level Alerts
 
 ALERT DevOps_AppCpuUsage
- IF(collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B002APP.*",} > 290 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B025APP.*"} > 10 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B003APP.*"} > 15 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B004APP.*"} > 25 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B007APP.*"} > 570 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B0(20|21)APP.*"} > 690 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B022APP.*"} > 15 or
-  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B023APP.*"} >0 )
-
+ IF(collectd_aggregation_percent{aggregation="cpu-average" , exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} > 60)
   FOR 3m
 
   LABELS {infra_grp="devops", severity="critical"}
