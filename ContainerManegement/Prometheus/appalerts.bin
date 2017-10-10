@@ -64,8 +64,6 @@ ALERT DevOps_NetworkError
 
  IF (collectd_interface_if_errors_0{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0 or
  collectd_interface_if_errors_1{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0
- collectd_interface_if_errors_0{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} > 0 or 
- collectd_interface_if_errors_1{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} > 0
 )
 
  FOR 3m
@@ -76,5 +74,14 @@ ALERT DevOps_NetworkError
   summary="APP_NETWORK_ALERT  ...ALERT"
   }
 
+ALERT DevOps_HypervisorNetworkError
+IF( (collectd_interface_if_errors_0{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} or  collectd_interface_if_errors_{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} ) > 0)
 
+FOR 3m
+
+LABELS {infra_grp="devops", severity="critical"}
+ANNOTATIONS {
+  description="{{$LABELS.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="HyperV_NETWORK_ALERT  ...ALERT"
+  }
 
