@@ -7,9 +7,15 @@ apache2:
     - reload: True
     - enable: True
 
+add_repo:
+  pkgrepo.managed:
+   - name : deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main
+   - file: /etc/apt/sources.list.d/ondrej-ubuntu-php-xenial.list
 
 php:
   pkg.installed:
+    - refresh: True
+    - skip_verify: True
     - pkgs:
       - php7.0
       - libapache2-mod-php7.0
@@ -20,11 +26,19 @@ php:
       - php7.0-mysql
       - php7.0-mcrypt
       - curl
-a2enmod:
-  cmd.run:
-    - name: 'a2enmod rewrite'
-    - user: www-data
-    - group: www-data
+      - php-apcu
+      - php-curl
+      - php-fpm
+      - php-gd
+      - php-gmp
+      - php-json
+      - php-mbstring
+      - php-pgsql
+      - php-readline
+      - php-xml
+      - php-zip
+      - php-mysql
+
 
 clone:
   git.latest:
@@ -33,6 +47,23 @@ clone:
     - target: /var/www/html/Cachet
     - force_clone: True
 
+fcgi:
+  cmd.run:
+    - name: 'a2enmod proxy_fcgi setenvif'
+    - user: root
+    - cwd: /var/www/html/Cachet/
+
+php7.1-fpm:
+  cmd.run:
+    - name: 'a2enconf php7.1-fpm'
+    - user: root
+    - cwd: /var/www/html/Cachet/
+
+a2enmod:
+  cmd.run:
+    - name: 'a2enmod rewrite'
+    - user: root
+    - cwd: /var/www/html/Cachet/
 
 /var/www/html/Cachet/:
   file.directory:
@@ -64,16 +95,17 @@ config_files_1:
 config_files_2:
   file.managed:
     - name: /etc/apache2/sites-available/cachet.conf
+    - source: salt://cachet/cachet.conf
+    - template: jinja
     - user: www-data
     - group: www-data
     - mode: 777
     - replace: True
-    - source: salt://cachet.conf
 
 symlink:
   file.symlink:
-    - name: /etc/apache2/sites-available/cachet.conf
-    - target: /etc/apache2/sites-enabled/cachet.conf
+    - name: /etc/apache2/sites-enabled/cachet.conf
+    - target: /etc/apache2/sites-available/cachet.conf
     - user: www-data
     - force: True
 
@@ -84,7 +116,6 @@ get-composer:
   pkg.installed:
     - pkgs:
       - composer
-      - php-xml
 
 set-env:
   environ.setenv:
@@ -109,3 +140,8 @@ app_install:
     - name: 'php artisan app:install'
     - user: www-data
     - cwd: /var/www/html/Cachet/
+
+service:
+  service.running:
+    - name: apache2
+    - reload: True
