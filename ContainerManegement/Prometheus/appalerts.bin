@@ -1,0 +1,77 @@
+
+#                                       App Level Alerts
+
+ALERT DevOps_APPS_CPU_SUM_PERCENT
+ IF(collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B002APP.*",} > 290 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B025APP.*"} > 10 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B003APP.*"} > 15 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B004APP.*"} > 25 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B007APP.*"} > 570 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B0(20|21)APP.*"} > 690 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B022APP.*"} > 15 or
+  collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B023APP.*"} >0 )
+
+  FOR 3m
+
+  LABELS {infra_grp="devops", severity="critical"}
+  ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP CPU SUM USAGE ...ALERT"
+  }
+
+ALERT DevOps_APP_BLOCKED_ZOMBIE_PROCESS
+ IF((collectd_processes_ps_state{exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*",processes=~"blocked|zombies"}) > 0)
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_BLOCKED_ZOMBIE_PROCESS  ...ALERT"
+  }
+
+ ALERT DevOps_APPS_MEM_ALERT
+ IF(collectd_memory_percent{memory="free",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*" }  < 10)
+ FOR 3m
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_MEMORY  ...ALERT"
+ }
+
+ALERT DevOps_APP_DOWN_ALERT
+ IF (collectd_processes_ps_count_0{processes=~"cassandra|kafka|consul|influxdb|grafana||kibana|elasticsearch",job="prometheus"} != 1
+ )
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APPS DOWN  ...ALERT"
+  }
+
+
+ALERT DevOps_APP_DISKFULL_ALERT
+ IF(collectd_df_percent_bytes{df="root",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 65)
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_DISKFULL_ALERT  ...ALERT"
+  }
+
+ALERT DevOps_APP_NetworkError
+
+ IF (collectd_interface_if_errors_0{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0 or
+ collectd_interface_if_errors_1{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0)
+
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_DISKFULL_ALERT  ...ALERT"
+  }
+
+
+
