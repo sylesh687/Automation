@@ -70,7 +70,7 @@ ALERT DevOps_APP_NetworkError
  LABELS {infra_grp="devops", severity="critical"}
  ANNOTATIONS {
   description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
-  summary="APP_DISKFULL_ALERT  ...ALERT"
+  summary="APP_NETWORK_ALERT  ...ALERT"
   }
 
 
