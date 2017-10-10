@@ -1,7 +1,7 @@
 
 #                                       App Level Alerts
 
-ALERT DevOps_APPS_CPU_SUM_PERCENT
+ALERT DevOps_AppCpuUsage
  IF(collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B002APP.*",} > 290 or
   collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B025APP.*"} > 10 or
   collectd_aggregation_percent{aggregation="cpu-sum",exported_instance=~"B003APP.*"} > 15 or
@@ -19,7 +19,7 @@ ALERT DevOps_APPS_CPU_SUM_PERCENT
   summary="APP CPU SUM USAGE ...ALERT"
   }
 
-ALERT DevOps_APP_BLOCKED_ZOMBIE_PROCESS
+ALERT DevOps_AppProcessBlockedZombie
  IF((collectd_processes_ps_state{exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*",processes=~"blocked|zombies"}) > 0)
  FOR 3m
 
@@ -29,8 +29,8 @@ ALERT DevOps_APP_BLOCKED_ZOMBIE_PROCESS
   summary="APP_BLOCKED_ZOMBIE_PROCESS  ...ALERT"
   }
 
- ALERT DevOps_APPS_MEM_ALERT
- IF(collectd_memory_percent{memory="free",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*" }  < 10)
+ ALERT DevOps_AppMemUsage
+ IF(collectd_memory_percent{memory="free",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*" }  < 30)
  FOR 3m
  LABELS {infra_grp="devops", severity="critical"}
  ANNOTATIONS {
@@ -38,9 +38,9 @@ ALERT DevOps_APP_BLOCKED_ZOMBIE_PROCESS
   summary="APP_MEMORY  ...ALERT"
  }
 
-ALERT DevOps_APP_DOWN_ALERT
+ALERT DevOps_AppAndMysqlDownAlert
  IF (collectd_processes_ps_count_0{processes=~"cassandra|kafka|consul|influxdb|grafana||kibana|elasticsearch",job="prometheus"} != 1
- )
+ or collectd_processes_ps_count_0{processes="mysql",job="prometheus"} != 2)
  FOR 3m
 
  LABELS {infra_grp="devops", severity="critical"}
@@ -50,7 +50,7 @@ ALERT DevOps_APP_DOWN_ALERT
   }
 
 
-ALERT DevOps_APP_DISKFULL_ALERT
+ALERT DevOps_AppDiskUsage
  IF(collectd_df_percent_bytes{df="root",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 65)
  FOR 3m
 
@@ -60,7 +60,7 @@ ALERT DevOps_APP_DISKFULL_ALERT
   summary="APP_DISKFULL_ALERT  ...ALERT"
   }
 
-ALERT DevOps_APP_NetworkError
+ALERT DevOps_NetworkError
 
  IF (collectd_interface_if_errors_0{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0 or
  collectd_interface_if_errors_1{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0)
