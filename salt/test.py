@@ -1,3 +1,3 @@
-import subprocess
+import git
 
-print (subprocess.run("ls",-"l"))
+git.Git().clone("https://github.com/sylesh687/Automation.git")

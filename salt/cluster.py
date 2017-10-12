@@ -72,7 +72,9 @@ def getMasterMinion():
 		 creating containers
 
 	'''
+	print num,name
 	conlist=cc(num,name)
+	print "container--list %s " % conlist
 	master=''
 	minion=[]
 	if len(conlist) == 1:
@@ -96,18 +98,21 @@ def settingupminion(minionlist):
 		Clone the Git Repository
 
 	'''
+	print minionlist
 	update="apt-get update"
 	install_python="apt-get install python-minimal -y "
 	clone="git clone https://github.com/sylesh687/Automation.git"
+	install_pylxd="pip install pylxd"
 	install_master="python  Automation/salt/salt.py 16 master"
 
-	rc,msg=ec(minionlist,update)
 	rc,msg=ec(minionlist,install_python)
 	
 	if rc==0:
 		print msg
 	else: 
 		print msg
+
+	rc,msg=ec(minionlist,install_pylxd)
 
 	rc,msg=ec(minionlist,clone)
 	

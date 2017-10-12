@@ -18,7 +18,7 @@ def runCmd(cmd):
 	
 
 	cmdargs=shlex.split(cmd)
-	Execute_Cmd=Popen(cmdargs, stdin=PIPE, stdout=PIPE, stderr=PIPE,shell=True)
+	Execute_Cmd=Popen(cmdargs, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 	output, err = Execute_Cmd.communicate()
 	rc=Execute_Cmd.returncode
 
@@ -34,11 +34,15 @@ def createContainer(number,containerPrefix="BB"):
 	conlist=[]
 
 	for con in range(int(number)):
+
+		print "Creating Cluster'"
 		
 		conname="%s%s" % (containerPrefix,con)
+		print conname
 		command="lxc launch ubuntu: %s "% (conname)
 		
 		output,err,rc=runCmd(command)
+		print "Code"
 
 		if rc==0:
 			conlist.append(conname)
