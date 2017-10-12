@@ -1,9 +1,12 @@
 
 from bbmodules import createContainer as cc
 from bbmodules import executeCmd as ec
+from bbmodules import runOnContainer as roc
 import re
 import sys
+from pylxd import Client
 
+import time as t
 
 def gatherInput():
 	clustnum=1
@@ -93,48 +96,72 @@ def getMasterMinion():
 
 
 
-def settingupminion(minionlist):
+def settingupminion(minionlist,conn):
 	'''
 		Clone the Git Repository
 
 	'''
 	print minionlist
 	update="apt-get update"
-	install_python="apt-get install python-minimal -y "
+	install_python="apt install python-minimal -y"
 	clone="git clone https://github.com/sylesh687/Automation.git"
 	install_pylxd="pip install pylxd"
-	install_master="python  Automation/salt/salt.py 16 master"
+	install_master="python  Automation/salt/salt.py 16 minion"
 
-	rc,msg=ec(minionlist,install_python)
+	rc,output,err= roc(conn,minionlist,update)
+	if rc==0:
+		print output
+	else: 
+		print err
+
+	
+
+	rc,output,err= roc(conn,minionlist,install_python)
 	
 	if rc==0:
-		print msg
+		print output
 	else: 
-		print msg
+		print err
 
-	rc,msg=ec(minionlist,install_pylxd)
 
-	rc,msg=ec(minionlist,clone)
-	
+	rc,output,err= roc(conn,minionlist,clone)
 	if rc==0:
-		print msg
+		print output
+
 	else: 
-		print msg
+		print err
 
-
-	rc,msg=ec(minionlist,install_master)
-	
+	rc,output,err= roc(conn,minionlist,"apt install python-pip -y")
 	if rc==0:
-		print msg
-	else: 
-		print msg
+		print output
+	else :
+		print err
+
+	rc,output,err= roc(conn,minionlist,"pip install pylxd")
+	if rc==0:
+		print output
+	else :
+		print err
+
+	
+
+	rc,output,err= roc(conn,minionlist,install_master)
+
+	if rc==0:
+		print output
+	else :
+		print err
+
+
+
 
 
 
 def main():
+	conn=Client()
 	master,minion= getMasterMinion()
 	print master
-	print (settingupminion(minion))
+	print (settingupminion(minion,conn))
 
 
 
