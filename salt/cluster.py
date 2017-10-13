@@ -108,7 +108,7 @@ class ConRun(threading.Thread):
 
 		
 		roc(self.conn,self.conlist,self.cmd)
-		t.sleep(5)
+		#t.sleep(5)
 
 
 def preReq(minionlist,conn):

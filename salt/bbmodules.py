@@ -180,8 +180,9 @@ def runOnContainer(conn,conlist,precmd):
 		for cmds in precmd:
 			print "[ %s ]  on  [ %s ]" %(cmds,container)
 			coexecute=conn.containers.get(container)
-			t.sleep(4)
+			
 			rc,stdout,sderr=coexecute.execute(['sh','-c',cmds])
+			t.sleep(10)
 			print stdout
 
 
