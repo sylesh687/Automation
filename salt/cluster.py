@@ -7,6 +7,8 @@ import sys
 from pylxd import Client
 
 import time as t
+import thread as th
+import threading 
 
 def gatherInput():
 	clustnum=1
@@ -32,7 +34,7 @@ def gatherInput():
 
 	clustname=raw_input("Enter the ClusterName: -- ")
 
-	if not re.match("^[a-z]*$",clustname):
+	if not re.match("^[a-zA-Z]*$",clustname):
 		 print "Please Enter  a Valid ClusterName [ Only letters a-z allowed! ]"
 		 sys.exit()
 	
@@ -93,102 +95,38 @@ def getMasterMinion():
 	return master,minion
 
 
+class ConRun(threading.Thread):
+	
+	def __init__(self,conn,conlist,cmd):
 
+		threading.Thread.__init__(self)
+		self.conn=conn
+		self.conlist=conlist
+		self.cmd=cmd
+	
+	def run(self):
 
-
-def settingupminion(minionlist,conn):
-	'''
-		Clone the Git Repository
-
-	'''
-	print "Minion LIST-- [%s]" % minionlist
-
-	flag=0
-	msg=''
-	update="apt-get update"
-	install_python="apt install python-minimal -y"
-	clone="git clone https://github.com/sylesh687/Automation.git"
-	install_pylxd="pip install pylxd"
-	install_master="python  Automation/salt/salt.py 16 minion"
-
-	rc,output,err= roc(conn,minionlist,update)
-	if rc==0:
 		
-		print output
-		
-		rc,output,err= roc(conn,minionlist,install_python)
-		
-		if rc==0:
-			
-			print output
-			rc,output,err= roc(conn,minionlist,install_python)
-
-			if rc==0:
-				print output
-				rc,output,err= roc(conn,minionlist,clone)
-				if rc==0:
-
-					print output
-
-					rc,output,err= roc(conn,minionlist,"apt install python-pip -y")
-					if rc==0:
-						print output
-						rc,output,err= roc(conn,minionlist,"pip install pylxd")
-						if rc==0:
-							print output
-						else:
-							print err
-
-					else:
-						print err
-				else:
-					print err
-
-			else :
-				print err
-
-		else: 
-			print err
+		roc(self.conn,self.conlist,self.cmd)
+		t.sleep(5)
 
 
+def preReq(minionlist,conn):
+	precmd=["apt update","apt install python-minimal -y","apt install python-pip -y","pip install pylxd"]
 
-	else: 
-		print err
-
-	
-
-	
-
-
-	
-
-	
-
-	rc,output,err= roc(conn,minionlist,"pip install pylxd")
-	if rc==0:
-		print output
-	else :
-		print err
-
-	
-
-	rc,output,err= roc(conn,minionlist,install_master)
-
-	if rc==0:
-		print output
-	else :
-		print err
-
-
-
+	thread1=ConRun(conn,minionlist,precmd)
+	thread1.start()
 
 
 
 def main():
+
 	conn=Client()
 	master,minion= getMasterMinion()
 	print master
-	print (settingupminion(minion,conn))
+	preReq(minion,conn)
+
+
 
 
 

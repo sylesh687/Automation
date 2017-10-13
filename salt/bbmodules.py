@@ -45,7 +45,7 @@ def createContainer(number,containerPrefix="BB"):
 		command="lxc launch ubuntu: %s "% (conname)
 		
 		output,err,rc=runCmd(command)
-		print "Code"
+		
 
 		if rc==0:
 			conlist.append(conname)
@@ -173,16 +173,20 @@ def executeCmd(containerList,command):
 
 '''
 
-def runOnContainer(conn,conlist,cmd):
+def runOnContainer(conn,conlist,precmd):
 	
-	rc,stdout,sderr=0,'',''
+	rc,stdout,sderr=0,'',''	
 	for container in conlist:
+		for cmds in precmd:
+			print "[ %s ]  on  [ %s ]" %(cmds,container)
+			coexecute=conn.containers.get(container)
+			t.sleep(4)
+			rc,stdout,sderr=coexecute.execute(['sh','-c',cmds])
+			print stdout
 
-		print "Dealing with %s" %(container)
-		coexecute=conn.containers.get(container)
-		rc,stdout,sderr=coexecute.execute(['sh','-c',cmd])
-		t.sleep(5)
 
-	return rc,stdout,sderr
+	
+
+
 
 
