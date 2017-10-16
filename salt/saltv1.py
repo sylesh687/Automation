@@ -157,10 +157,12 @@ class salt:
 		role="salt-%s" % role
 		saltcmd="apt install % s " % role
 		cmdlist=["apt-get update ",saltcmd]
-		print saltcmd
+		
 		
 		for cmdlet in cmdlist:
-			saltcmd="Running [[%s]] on [[%s]]" %(saltcmd,os.system("hostname"))
+			saltcmd="Running [[%s]] on [[%s]]" % (saltcmd,os.system("hostname"))
+
+			print saltcmd
 			output,err,rc=cmd(cmdlet)
 			time.sleep(9)
 			
