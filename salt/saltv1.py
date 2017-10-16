@@ -119,15 +119,8 @@ class salt:
 			Adding the Public Key
 
 		'''
-		key_download = 'wget -O - %s ' % (gpgpubkey)
+		key_download = 'wget -O - %s ' % gpgpubkey
 		print key_download
-
-        if rc==0:
-        	print output
-        else:
-        	print err
-
-        
 
 		try:
 
