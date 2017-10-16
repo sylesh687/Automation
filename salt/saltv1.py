@@ -121,6 +121,8 @@ class salt:
 		'''
 		key_download = 'wget -O - %s ' % gpgpubkey
 		print key_download
+		cmd1=shlex.split(key_download)
+		print cmd1
 
 		try:
 
