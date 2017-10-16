@@ -134,10 +134,7 @@ class salt:
         else:
         	print err
 
-        '''
-				Writing to file
-
-        '''
+        
 
 		try:
 
