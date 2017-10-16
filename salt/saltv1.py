@@ -8,6 +8,7 @@
 '''
 import sys
 import shlex
+from subprocess import Popen, PIPE
 from bbmodules import runCmd as cmd
 
 
