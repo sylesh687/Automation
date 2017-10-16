@@ -6,7 +6,8 @@
 
 
 '''
-#import sys
+import sys
+import shlex
 from bbmodules import runCmd as cmd
 
 
