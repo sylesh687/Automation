@@ -149,6 +149,7 @@ class salt:
 
 	
 	def installSalt(self):
+		import os 
 		
 		role,version=self.validate()
 		role=str(role)
@@ -159,6 +160,7 @@ class salt:
 		print saltcmd
 		
 		for cmdlet in cmdlist:
+			saltcmd="Running [[%s]] on [[%s]]" %(saltcmd,os.system("hostname"))
 			output,err,rc=cmd(cmdlet)
 			time.sleep(9)
 			
