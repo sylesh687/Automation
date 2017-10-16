@@ -6,7 +6,7 @@
 
 
 '''
-import sys
+#import sys
 from bbmodules import runCmd as cmd
 
 
@@ -113,6 +113,32 @@ class salt:
 		filename="/etc/apt/sources.list.d/saltstack.list"
 
 		gpgpubkey,repourl=self.createurl()
+
+		'''
+			Adding the Public Key
+
+		'''
+		 key_download = 'wget -O - %s ' % (gpgpubkey)
+         key="sudo apt-key add -"
+         Cmd1=shlex.split(key_download)
+         Cmd2=shlex.split(key)
+
+
+         st_out_1=Popen(Cmd1, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+         st_out_2=Popen(Cmd2,stdin=st_out_1.stdout,stdout=PIPE,stderr=PIPE)
+         output, err = st_out_2.communicate()
+         rc=st_out_2.returncode
+
+         if rc==0:
+         	print output
+         else: 
+
+         	print err
+
+         '''
+				Writing to file
+
+         '''
 
 		try:
 
