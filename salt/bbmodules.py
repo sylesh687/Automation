@@ -5,7 +5,7 @@ import logging
 from subprocess import Popen, PIPE
 import shlex
 
-from pylxd import Client
+
 import re
 
 import time as t
