@@ -9,6 +9,7 @@ import thread
 
 def runCmd(cmd):
 	from subprocess import Popen, PIPE
+	import shlex
 	
 
 	cmdargs=shlex.split(cmd)
