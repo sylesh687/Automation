@@ -160,7 +160,7 @@ class salt:
 		
 		
 		for cmdlet in cmdlist:
-			saltcmd="Running [[%s]] ..." % (saltcmd)
+			saltcmd="Running [[%s]] ..." % (cmdlet)
 
 			print saltcmd
 			output,err,rc=cmd(cmdlet)
