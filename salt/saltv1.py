@@ -124,8 +124,12 @@ class salt:
 		cmd1=shlex.split(key_download)
 		cmd2=shlex.split("sudo apt-key add -")
 
-		print cmd1 
-		print cmd2
+		scmd1=Popen(cmd1, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+		scmd2=Popen(cmd2,stdin=st_out_1.stdout,stdout=PIPE,stderr=PIPE)
+
+		output, err, rc = scmd2.communicate()
+
+		print output
 
 		try:
 
