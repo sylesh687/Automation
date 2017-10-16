@@ -160,7 +160,7 @@ class salt:
 		
 		
 		for cmdlet in cmdlist:
-			saltcmd="Running [[%s]] on [[%s]]" % (saltcmd,os.system("hostname"))
+			saltcmd="Running [[%s]] ..." % (saltcmd)
 
 			print saltcmd
 			output,err,rc=cmd(cmdlet)
