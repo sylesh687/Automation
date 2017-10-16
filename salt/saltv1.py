@@ -6,6 +6,8 @@
 
 
 '''
+
+import time
 import sys
 import shlex
 from subprocess import Popen, PIPE
@@ -157,6 +159,7 @@ class salt:
 		
 		for cmdlet in cmdlist:
 			output,err,rc=cmd(cmdlet)
+			time.sleep(9)
 			
 			if rc==0:
 				
