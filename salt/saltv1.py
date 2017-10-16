@@ -155,7 +155,7 @@ class salt:
 		role=role.lower()
 		role="salt-%s" % role
 		saltcmd="apt install % s " % role
-		cmdlist=["apt update",saltcmd]
+		cmdlist=["apt-get update",saltcmd]
 		
 		for cmdlet in cmdlist:
 			output,err,rc=cmd(cmdlet)
