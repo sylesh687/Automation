@@ -122,7 +122,10 @@ class salt:
 		key_download = 'wget -O - %s ' % gpgpubkey
 		print key_download
 		cmd1=shlex.split(key_download)
-		print cmd1
+		cmd2=shlex.split("sudo apt-key add -")
+
+		print cmd1 
+		print cmd2
 
 		try:
 
