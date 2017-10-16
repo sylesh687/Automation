@@ -177,15 +177,17 @@ def runOnContainer(conn,conlist,precmd):
 	
 	rc,stdout,sderr=0,'',''	
 	for container in conlist:
+		coexecute=conn.containers.get(container)
 		for cmds in precmd:
 			print "[ %s ]  on  [ %s ]" %(cmds,container)
-			coexecute=conn.containers.get(container)
+			#coexecute=conn.containers.get(container)
+			rc,stdout,stderr=coexecute.execute(['sh','-c',cmds])
+			t.sleep(20)
+			if rc==0:
+				print stdout
+			else:
+				print stderr
 			
-			rc,stdout,sderr=coexecute.execute(['sh','-c',cmds])
-			t.sleep(10)
-			print stdout
-
-
 	
 
 

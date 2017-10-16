@@ -82,6 +82,7 @@ def getMasterMinion():
 	print "container--list %s " % conlist
 	master=''
 	minion=[]
+
 	if len(conlist) == 1:
 		print "Single Node Cluster"
 		master=conlist[0]
@@ -105,17 +106,37 @@ class ConRun(threading.Thread):
 		self.cmd=cmd
 	
 	def run(self):
-
 		
 		roc(self.conn,self.conlist,self.cmd)
-		#t.sleep(5)
+		t.sleep(5)
 
 
 def preReq(minionlist,conn):
-	precmd=["apt update","apt install python-minimal -y","apt install python-pip -y","pip install pylxd"]
 
-	thread1=ConRun(conn,minionlist,precmd)
+	precmd=["apt upgrade","apt install python-minimal -y","apt update ; apt install python-pip -y","pip install pylxd","git clone https://github.com/sylesh687/Automation.git"]
+	lh=rh=0
+
+	if len(minionlist)%2==0:
+		lh=len(minionlist)/2
+		rh=lh
+
+	else:
+
+		lh=len(minionlist)//2
+		rh=len(minionlist)-lh
+
+	print lh
+	print rh
+	thread1=ConRun(conn,minionlist[:lh],precmd)
+	thread2=ConRun(conn,minionlist[-rh:],precmd)
+	
+	print minionlist[:lh]
+	print minionlist[-rh:]
 	thread1.start()
+	thread2.start()
+
+
+
 
 
 
@@ -124,6 +145,7 @@ def main():
 	conn=Client()
 	master,minion= getMasterMinion()
 	print master
+	print minion
 	preReq(minion,conn)
 
 

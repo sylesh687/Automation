@@ -19,6 +19,7 @@ def inputs():
         usage()
 
     else:
+       
         ver=sys.argv[1]
         role=sys.argv[2]
 
@@ -38,6 +39,7 @@ def inputs():
               with open('/etc/apt/sources.list.d/saltstack.list','w') as f:
                 f.write(url2)
                 print "%s is success fully written to /etc/apt/sources.list.d/saltstack.list" % url2
+            
             except IOError as e:
               print "unable to write to file %s" % e
 
