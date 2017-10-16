@@ -125,7 +125,7 @@ class salt:
 		cmd2=shlex.split("sudo apt-key add -")
 
 		scmd1=Popen(cmd1, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-		scmd2=Popen(cmd2,stdin=st_out_1.stdout,stdout=PIPE,stderr=PIPE)
+		scmd2=Popen(cmd2,stdin=scmd1.stdout,stdout=PIPE,stderr=PIPE)
 
 		output, err, rc = scmd2.communicate()
 
