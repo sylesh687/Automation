@@ -17,5 +17,5 @@ class instantSalt:
    		print rc 
 
 
- i=install_salt("P")
+ i=instantSalt("P")
  i.setup()
