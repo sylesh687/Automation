@@ -16,6 +16,12 @@ class instantSalt:
    		print err
    		print rc 
 
+   		install_salt="sh install_salt.sh -%s" %(role)
+   		output, err , rc=cmd(install_salt)
+   		print output
+   		print err
+   		print rc 
+
 
 i=instantSalt("P")
 i.setup()
