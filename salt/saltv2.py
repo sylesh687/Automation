@@ -17,5 +17,5 @@ class instantSalt:
    		print rc 
 
 
- i=instantSalt("P")
- i.setup()
+i=instantSalt("P")
+i.setup()
