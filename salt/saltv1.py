@@ -187,7 +187,7 @@ if __name__=="__main__":
 	'''
 
 	ver=input("Enter The Salt Version--(12/14/16)-")
-	role=input("Enter The Salt Role -- (master/minion)-")
+	role=raw_input("Enter The Salt Role -- (master/minion)-")
 
 	salty=salt(ver,role)
 	salty.writetofile()
