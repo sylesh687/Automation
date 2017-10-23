@@ -186,12 +186,11 @@ if __name__=="__main__":
 
 	'''
 
-	salt1=salt("16","master")
+	ver=input("Enter The Salt Version--(12/14/16)-")
+	role=input("Enter The Salt Role -- (master/minion)-")
 
-	# Writing to file
-
-	salt1.writetofile()
-
-	salt1.installSalt()
+	salty=salt(ver,role)
+	salty.writetofile()
+	salty.installSalt()
 
 
