@@ -1,0 +1,118 @@
+#                                       Common Alerts
+
+ALERT DevOpsNetworkError
+
+ IF (collectd_interface_if_errors_0{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0 or
+ collectd_interface_if_errors_1{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0
+ or  (collectd_interface_if_errors_0{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"}) > 0 or
+ collectd_interface_if_errors_{exported_instance=~"bb-blr-prod-(compute|mon|platform|db)-.*"} > 0
+ )
+
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_NETWORK_ALERT  ...ALERT"
+  }
+
+
+#					                                      App Alerts
+
+ALERT DevOpsAppCpuUsage
+ IF(collectd_aggregation_percent{aggregation="cpu-average",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 65)
+  FOR 3m
+
+  LABELS {infra_grp="devops", severity="critical"}
+  ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP CPU SUM USAGE ...ALERT"
+  }
+
+ALERT DevOpsAppProcessBlockedZombie
+ IF((collectd_processes_ps_state{exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*",processes=~"blocked|zombies"}) > 0)
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_BLOCKED_ZOMBIE_PROCESS  ...ALERT"
+  }
+
+ ALERT DevOpsAppMemUsage
+ IF(collectd_memory_percent{memory="free",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*" }  < 30)
+ FOR 3m
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_MEMORY  ...ALERT"
+ }
+
+ALERT DevOpsAppAndMysqlDownAlert
+ IF (collectd_processes_ps_count_0{processes=~"cassandra|kafka|consul|influxdb|grafana||kibana|elasticsearch",job="prometheus"} != 1
+ or collectd_processes_ps_count_0{processes="mysql",job="prometheus"} != 2)
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APPS DOWN  ...ALERT"
+  }
+
+
+ALERT DevOpsAppDiskUsage
+ IF(collectd_df_percent_bytes{df="root",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 65)
+ FOR 3m
+
+ LABELS {infra_grp="devops", severity="critical"}
+ ANNOTATIONS {
+  description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+  summary="APP_DISKFULL_ALERT  ...ALERT"
+}
+
+
+
+ALERT DevOpsNodeup
+
+ IF(consul_catalog_service_node_healthy{node=~"B0(07|02|25|03|20|21|22|23)APP.*"}!=1)
+
+  
+FOR 3m
+
+ LABELS {
+  infra_grp="devops", severity="critical"
+  }
+ 
+ ANNOTATIONS {
+ description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+ summary="Node Health alerts for {{$labels.instance}} "}
+
+
+ ALERT DevOpsELKIndices
+ IF (collectd_elasticsearch_counter_total{elasticsearch="bb_IN_elk_prod",type="indices.get.total"} > 0)
+
+ FOR 3m
+
+ LABELS {
+  infra_grp="devops", severity="critical"
+  }
+ 
+ ANNOTATIONS {
+ description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+ summary="ElasticSearch Indices alerts for {{$labels.instance}} "}
+
+ ALERT DevOpsPlatformHeap
+  
+ IF (collectd_elasticsearch_percent{elasticsearch="bb_IN_elk_prod",type="jvm.mem.heap-used-percent"}> 75 or 
+
+ (collectd_GenericJMX_memory{GenericJMX="cassandra_java_memory",type="heap-used"} / IGNORING(type) collectd_GenericJMX_memory{GenericJMX="cassandra_java_memory",type="heap-max"} * 100 ) > 65  )
+
+ FOR 3m
+
+ LABELS {
+  infra_grp="devops", severity="critical"
+  }
+ 
+ ANNOTATIONS {
+ description="{{$labels.job}} on {{$labels.instance}} on {{$labels.node}} value {{ $value }}",
+ summary="HeapMemory alerts for {{$labels.instance}} "}
