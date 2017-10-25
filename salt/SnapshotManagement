@@ -1,0 +1,51 @@
+
+									[[   Exporting Image From Timely LXCSnapshot POC ]]
+
+
+
+Problem Def:
+
+	We need to export a snapshot as tar.gz file of a jenkins Container
+
+
+Simulations Done:
+
+	Step 1: Creating a LXC Container for Jenkins
+
+			lxc launch ubuntu:16.04 jenkins
+
+
+	Step 2: Setup Jenkins on this container
+
+			( Make sure the gpgkey and repository is added and updatee)
+
+			apt install jenkins -y 4
+			systemctl start jenkins 
+			systemctl enable jenkins
+
+	Step 3: Create a snapshot of the running container 
+
+			 lxc snapshot jenkins jenkinsSnapshot
+
+			 lxc info jenkins 
+
+			 lxc publish jenkins/jenkinsSnapshot --alias JenkinsBakup
+
+			 lxc image export JenkinsBakup
+
+
+##3##################################333
+
+
+Certificate Alerts for All the websites
+
+
+
+
+
+
+
+
+
+
+updates.bankbazaar.com
