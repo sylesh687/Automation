@@ -1,7 +1,7 @@
 
 #                                       Common Alerts
 
-ALERT DevOps_NetworkError
+ALERT DevOpsNetworkError
 
  IF (collectd_interface_if_errors_0{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0 or
  collectd_interface_if_errors_1{interface="eth0",job="prometheus",exported_instance=~"B0(07|02|25|03|20|21|22|23)APP.*"} > 0
